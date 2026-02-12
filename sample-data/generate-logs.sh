@@ -1,5 +1,15 @@
 #!/bin/bash
-# realistic log generator for SRE labs
+
+
+# ==================================================
+# generate-logs.sh
+# Creates realistic production-style logs for testing
+# /var/log/app
+#  - app.log
+# /var/log/nginx
+#  - access.log
+# ==================================================
+
 
 set -euo pipefail
 
