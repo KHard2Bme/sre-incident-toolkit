@@ -92,12 +92,18 @@ aws s3 cp "$ARCHIVE_DIR" "$S3_BUCKET/$TIMESTAMP/" \
 echo ""
 
 # -----------------------------------------------------
-# Delete > 7 days old
+# Delete old logs + archives > 7 days
 # -----------------------------------------------------
-echo "Deleting logs older than 7 days..."
+echo "Deleting logs and compressed archives older than 7 days..."
 
-FILES_DELETED=$(find "$ARCHIVE_DIR" -type f -mtime +7 | wc -l || true)
-find "$ARCHIVE_DIR" -type f -mtime +7 -delete
+FILES_DELETED=$(find "$ARCHIVE_DIR" -type f \
+  \( -name "*.log" -o -name "*.gz" -o -name "*.tar.gz" -o -name "*.tgz" \) \
+  -mtime +7 | wc -l || true)
+
+find "$ARCHIVE_DIR" -type f \
+  \( -name "*.log" -o -name "*.gz" -o -name "*.tar.gz" -o -name "*.tgz" \) \
+  -mtime +7 -delete
+
 
 echo ""
 
