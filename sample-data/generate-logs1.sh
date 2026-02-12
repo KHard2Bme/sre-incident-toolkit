@@ -70,7 +70,9 @@ done
 
 # --------------------------------------------------
 # 2) Rotated compressed logs (.gz)
-# 15 total, 5 older than 7 days
+# 15 total
+# 9 older than 20 days (mixed)
+# 6 recent
 # --------------------------------------------------
 echo "Generating rotated archives..."
 
@@ -79,19 +81,24 @@ count=0
 for log in "${ACTIVE_LOGS[@]}"; do
   for i in 1 2 3; do
     tmp="$LOG_DIR/$log.$i"
+
     gen_log "$tmp"
     sudo gzip "$tmp"
 
     count=$((count+1))
 
-    if [ $count -le 5 ]; then
-      sudo touch -d "10 days ago" "$tmp.gz"
+    if [ $count -le 9 ]; then
+      # random age between 21–35 days
+      days=$((RANDOM%15+21))
+      sudo touch -d "$days days ago" "$tmp.gz"
     else
+      # recent files 1–5 days
       days=$((RANDOM%5+1))
       sudo touch -d "$days days ago" "$tmp.gz"
     fi
   done
 done
+
 
 # --------------------------------------------------
 # 3) Extra loose logs (NOT rotated)
