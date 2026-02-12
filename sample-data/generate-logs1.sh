@@ -2,12 +2,15 @@
 
 # ==================================================
 # generate-logs1.sh
-# Creates realistic production-style logs for testing
-# /var/log/app
-#  - 5 active logs (NOT app.log)
+# Creates realistic production-style logs
+#
+# Creates:
+#  - 5 active logs
 #  - 15 rotated .gz logs
-#  - 5 older than 7 days (eligible for cleanup)
+#  - 15 extra loose .log files (8 older than 20 days)
 # ==================================================
+
+set -e
 
 LOG_DIR="/var/log/app"
 LINES=2000
@@ -16,9 +19,11 @@ echo "Creating realistic log environment in $LOG_DIR ..."
 
 sudo mkdir -p "$LOG_DIR"
 
+
 # --------------------------------------------------
-# Active log names (NO app.log)
+# Log sets
 # --------------------------------------------------
+
 ACTIVE_LOGS=(
   "access.log"
   "worker.log"
@@ -27,8 +32,10 @@ ACTIVE_LOGS=(
   "auth.log"
 )
 
+EXTRA_LOG_PREFIX="service"
+
 # --------------------------------------------------
-# Function: generate random log content
+# Generate content
 # --------------------------------------------------
 gen_log () {
   file=$1
@@ -48,12 +55,12 @@ gen_log () {
       print strftime("%F %T"), "WARN slow query"
 
     else
-      print strftime("%F %T"), "ERROR database timeout"
+      print strftime("%F %T"), "ERROR db timeout"
   }' | sudo tee "$file" >/dev/null
 }
 
 # --------------------------------------------------
-# Create 5 active logs
+# 1) Active logs
 # --------------------------------------------------
 echo "Generating active logs..."
 
@@ -62,8 +69,8 @@ for log in "${ACTIVE_LOGS[@]}"; do
 done
 
 # --------------------------------------------------
-# Create 15 rotated compressed logs
-# 5 older than 7 days
+# 2) Rotated compressed logs (.gz)
+# 15 total, 5 older than 7 days
 # --------------------------------------------------
 echo "Generating rotated archives..."
 
@@ -72,17 +79,14 @@ count=0
 for log in "${ACTIVE_LOGS[@]}"; do
   for i in 1 2 3; do
     tmp="$LOG_DIR/$log.$i"
-
     gen_log "$tmp"
     sudo gzip "$tmp"
 
     count=$((count+1))
 
-    # first 5 -> old (>7 days)
     if [ $count -le 5 ]; then
-      sudo touch -d "12 days ago" "$tmp.gz"
+      sudo touch -d "10 days ago" "$tmp.gz"
     else
-      # rest recent (1–5 days old)
       days=$((RANDOM%5+1))
       sudo touch -d "$days days ago" "$tmp.gz"
     fi
@@ -90,19 +94,38 @@ for log in "${ACTIVE_LOGS[@]}"; do
 done
 
 # --------------------------------------------------
+# 3) Extra loose logs (NOT rotated)
+# 15 files, 8 older than 20 days
+# --------------------------------------------------
+echo "Generating additional service logs..."
+
+for i in {1..15}; do
+  file="$LOG_DIR/${EXTRA_LOG_PREFIX}-${i}.log"
+  gen_log "$file"
+
+  if [ "$i" -le 8 ]; then
+    sudo touch -d "25 days ago" "$file"
+  else
+    days=$((RANDOM%3+1))
+    sudo touch -d "$days days ago" "$file"
+  fi
+done
+
+# --------------------------------------------------
 # Summary
 # --------------------------------------------------
 echo
 echo "✅ Done!"
-echo "Directory contents:"
+echo "Contents:"
 sudo ls -lh "$LOG_DIR"
 
 echo
-echo "Line counts (sample):"
-for f in "$LOG_DIR"/*.log; do
-  echo "$(basename $f): $(wc -l < $f) lines"
-done
+echo "Counts:"
+echo "Active logs : 5"
+echo "Rotated .gz : 15"
+echo "Extra logs  : 15"
+echo "Total files : $(ls $LOG_DIR | wc -l)"
 
 echo
-echo "Disk usage:"
 df -h "$LOG_DIR"
+
