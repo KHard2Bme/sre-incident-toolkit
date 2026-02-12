@@ -1,0 +1,70 @@
+ TRIAGE REPORT
+ Generated: Thu Feb 12 07:00:42 UTC 2026
+ Host: ip-172-31-79-133
+=========================================
+
+========== LAST 20 APPLICATION ERRORS ==========
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+2026-02-12 06:49:03 ERROR Database timeout
+
+========== HTTP 5xx RESPONSE COUNT ==========
+Total 5xx responses: 1819
+
+========== TOP FAILING ENDPOINTS ==========
+    326 /api/orders
+    322 /api/cart
+    315 /health
+    304 /api/products
+    286 /api/login
+
+
+========== DISK USAGE ==========
+Filesystem       Size  Used Avail Use% Mounted on
+/dev/root        6.8G  2.8G  4.0G  41% /
+tmpfs            458M     0  458M   0% /dev/shm
+tmpfs            183M  892K  182M   1% /run
+tmpfs            5.0M     0  5.0M   0% /run/lock
+efivarfs         128K  3.8K  120K   4% /sys/firmware/efi/efivars
+/dev/nvme0n1p16  881M   89M  730M  11% /boot
+/dev/nvme0n1p15  105M  6.2M   99M   6% /boot/efi
+tmpfs             92M   12K   92M   1% /run/user/1000
+
+========== MEMORY USAGE ==========
+               total        used        free      shared  buff/cache   available
+Mem:           914Mi       385Mi       113Mi       2.7Mi       597Mi       529Mi
+Swap:             0B          0B          0B
+
+========== CPU LOAD ==========
+ 07:00:42 up  5:06,  1 user,  load average: 0.00, 0.00, 0.00
+
+========== SYSTEM UPTIME ==========
+up 5 hours, 6 minutes
+
+========== RECOMMENDATIONS ==========
+- High 5xx error rate detected. Check app service, DB, or upstream dependencies.
+- Low available memory. Investigate memory leaks or scale instance.
+- Review logs above for root cause indicators.
+- Restart affected services if needed: systemctl restart nginx
+- Escalate if errors persist.
+
+=========================================
+Report saved to: triage-report-20260212-070042.csv
+=========================================

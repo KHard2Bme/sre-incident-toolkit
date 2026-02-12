@@ -1,0 +1,2 @@
+timestamp	    disk_used_percent	files_rotated	files_uploaded	files_deleted	size_before	size_after	space_saved_mb     	s3_path
+20260212-085122        	41	            21	            21	             9	           240K        120K	         120	          s3://my-sre-log-archive-bucket/20260212-085122/
