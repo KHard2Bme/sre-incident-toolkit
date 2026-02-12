@@ -80,7 +80,7 @@ count=0
 
 for log in "${ACTIVE_LOGS[@]}"; do
   for i in 1 2 3; do
-    tmp="$LOG_DIR/$log.$i"
+    tmp="$LOG_DIR/archive/$log.$i"
 
     gen_log "$tmp"
     sudo gzip "$tmp"
