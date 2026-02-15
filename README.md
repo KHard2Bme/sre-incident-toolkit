@@ -74,6 +74,12 @@ Incident investigation script that gathers system + application signals into one
 - System uptime
 - Recommendation section
 
+Run:
+
+```bash
+./triage.sh
+```
+
 ### Output
 reports/triage-report-YYYYMMDD-HHMMSS.csv
 
@@ -97,6 +103,12 @@ Lightweight **production-safe log cleanup + archival automation**.
 - Generates CSV audit report
 - Cron friendly (Friday 10PM schedule)
 
+Run:
+
+```bash
+./logrotate-lite.sh
+```
+
 ### 📊 CSV Report
 reports/logrotate-report-YYYYMMDD-HHMMSS.csv
 
@@ -108,6 +120,28 @@ Perfect for:
 - metrics
 - interview proof
 - operational visibility
+
+---
+
+Cron example (Friday 10PM):
+
+```
+0 22 * * 5 /home/ubuntu/scripts/logrotate-lite.sh
+```
+
+---
+
+## 🧪 generate-logs.sh — Realistic Test Data
+
+Creates 2000+ line logs for realistic testing.
+
+```bash
+./generate-logs.sh
+```
+
+Generates:
+- app.log
+- access.log
 
 ---
 
@@ -124,15 +158,52 @@ Realistic log generator for safe local testing.
 - 5xx responses
 - failing endpoints
 
+```bash
+./generate-logs1.sh
+```
+
 ### Purpose
 Simulates production behavior so you can:
 - test rotation logic
 - simulate disk pressure
 - validate deletion rules
 - test retention safely
-
-No real logs required.
-
 ---
 
-# 📁 Repository Structure
+# 🎬 Quick Demo
+
+```bash
+# generate logs
+./sample-data/generate-logs.sh
+./sample-data/generate-logs1.sh
+
+# copy to system paths
+sudo mkdir -p /var/log/app /var/log/nginx /etc/app
+sudo cp sample-data/*.log /var/log/app/
+sudo cp sample-data/access.log /var/log/nginx/
+
+# triage outage
+./scripts/triage.sh
+
+# cleanup disk + archive
+./scripts/logrotate-lite.sh
+```
+---
+# 🧠 Skills Demonstrated
+
+- Bash scripting
+- Linux CLI troubleshooting
+- grep / awk / sed pipelines
+- systemctl & services
+- cron scheduling
+- gzip compression
+- AWS CLI + S3
+- Log lifecycle management
+- Incident response mindset
+
+---
+# 👤 Author
+
+Built as a practical DevOps/SRE portfolio project to demonstrate real-world operational skills.
+
+Happy debugging 🚀
