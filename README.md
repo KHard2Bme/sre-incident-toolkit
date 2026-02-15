@@ -178,8 +178,8 @@ Simulates production behavior so you can:
 ./sample-data/generate-logs1.sh
 
 # copy to system paths
-sudo mkdir -p /var/log/app /var/log/nginx /etc/app
-sudo cp sample-data/*.log /var/log/app/
+sudo mkdir -p /var/log/app 
+sudo cp sample-data/auth.log /var/log/app/
 sudo cp sample-data/access.log /var/log/nginx/
 
 # triage outage
