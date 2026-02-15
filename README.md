@@ -55,7 +55,7 @@ Incident investigation script that gathers system + application signals into one
 - Recommendation section
 
 ### Output
-reports/triage-report.txt
+reports/triage-report-YYYYMMDD-HHMMSS.csv
 
 ---
 
