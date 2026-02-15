@@ -85,7 +85,7 @@ reports/triage-report-YYYYMMDD-HHMMSS.csv
 
 ---
 
-## ♻️ logrotate-lite.sh (UPDATED)
+## ♻️ logrotate-lite.sh 
 
 Lightweight **production-safe log cleanup + archival automation**.
 
@@ -145,7 +145,7 @@ Generates:
 
 ---
 
-## 🧪 generate-logs1.sh (NEW)
+## 🧪 generate-logs1.sh 
 
 Realistic log generator for safe local testing.
 
