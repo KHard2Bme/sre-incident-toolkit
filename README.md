@@ -37,7 +37,27 @@ This toolkit helps you:
 3️⃣ Prevent repeat incidents (automation + archival)
 
 ---
+# 🗂️ Repo Structure
 
+```
+sre-incident-toolkit/
+│
+├── scripts/
+│   ├── triage.sh            # 📊 System + app health snapshot report
+│   ├── logrotate-lite.sh    # 🧹 Rotate/compress/upload logs to S3
+│
+├── sample-data/
+│   └── generate-logs.sh     # 🧪 Creates realistic production-style auth and access.logs for testing
+|   └── generate-logs1.sh    # 🧪 Creates realistic production-style logs and archived .gz logs for testing
+│
+├── reports/                 # 📄 All generated reports 
+├── screenshots/             # 🖼️ screenshots taken from production environment
+│
+├── README.md
+└── .gitignore
+```
+
+---
 # 🧰 Toolkit Components
 
 ## 🩺 triage.sh
