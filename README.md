@@ -1,25 +1,34 @@
-# 🚑⚙️ Linux SRE Incident Response & Automation Toolkit
+# 🚑 SRE Incident Response Toolkit (Linux + Bash)
 
-> **Hands‑on DevOps/SRE portfolio project that simulates real production outages and demonstrates diagnosing, remediating, and preventing issues using Bash + Linux + AWS.**
+![Bash](https://img.shields.io/badge/Bash-Scripting-black?logo=gnu-bash)
+![Linux](https://img.shields.io/badge/Linux-Ubuntu-E95420?logo=ubuntu)
+![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20S3-orange?logo=amazon-aws)
+![NGINX](https://img.shields.io/badge/NGINX-Web%20Server-green?logo=nginx)
+![SRE](https://img.shields.io/badge/Role-SRE-blue)
+![DevOps](https://img.shields.io/badge/Discipline-DevOps-purple)
+![Automation](https://img.shields.io/badge/Focus-Automation-success)
+![Logs](https://img.shields.io/badge/Domain-Log%20Management-informational)
 
-Built to showcase:
-- 🐧 Linux troubleshooting
-- 📊 Log analysis (grep / awk / sed / sort)
-- 🧠 Incident response workflows
-- 🧹 Log rotation & cleanup
-- ☁️ S3 archival
-- ⏰ Cron automation
-- 🚀 EC2 bootstrapping
+
+Production-style **Cloud / DevOps / SRE portfolio project** that simulates real outages and demonstrates how to:
+
+✅ Diagnose incidents fast  
+✅ Fix root causes safely  
+✅ Rotate & archive logs  
+✅ Automate remediation  
+✅ Generate audit reports  
+
+Designed for Ubuntu EC2 + NGINX environments.
 
 ---
 
-# ✨ Project Story
+## 🔥 Scenario
 
-Imagine it's **2AM** and production is failing:
+Imagine it's **2AM and production is failing**:
 
-- API returning 5xx errors  
-- Disk almost full  
-- Users complaining  
+• API returning 5xx errors  
+• Disk almost full  
+• Users complaining  
 
 This toolkit helps you:
 
@@ -27,150 +36,83 @@ This toolkit helps you:
 2️⃣ Fix root cause (cleanup/rotation)  
 3️⃣ Prevent repeat incidents (automation + archival)
 
-Exactly what real **SRE/DevOps engineers** do daily.
+---
+
+# 🧰 Toolkit Components
+
+## 🩺 triage.sh
+
+Incident investigation script that gathers system + application signals into one report.
+
+### Checks
+- Last 20 application errors
+- 5xx response counts
+- Top failing endpoints
+- Disk usage
+- Memory usage
+- CPU load
+- System uptime
+- Recommendation section
+
+### Output
+reports/triage-report.txt
 
 ---
 
-# 🗂️ Repo Structure
+## ♻️ logrotate-lite.sh (UPDATED)
 
-```
-sre-incident-toolkit/
-│
-├── scripts/
-│   ├── triage.sh            # 📊 System + app health snapshot report
-│   ├── logrotate-lite.sh    # 🧹 Rotate/compress/upload logs to S3
-│
-├── sample-data/
-│   └── generate-logs.sh     # 🧪 Creates 2000+ line realistic logs
-│
-├── reports/                 # 📄 Generated reports (gitignored)
-├── screenshots/             # 🖼️ Demo screenshots
-│
-├── README.md
-└── .gitignore
-```
+Lightweight **production-safe log cleanup + archival automation**.
 
----
+### 🚀 Features
+- Triggers when disk usage > 70%
+- Removes DEBUG lines before rotation
+- Rotates all *.log files
+- Compresses rotated logs (.gz)
+- Uploads archives to AWS S3
+- Deletes:
+  - *.log older than 7 days
+  - *.gz / *.tar.gz older than 7 days
+- Calculates space saved
+- Prints summary
+- Generates CSV audit report
+- Cron friendly (Friday 10PM schedule)
 
-# 🧰 Scripts Overview
+### 📊 CSV Report
+reports/logrotate-report-YYYYMMDD-HHMMSS.csv
 
-## 📊 triage.sh — Incident Snapshot
+Columns:
+timestamp,disk_used_percent,files_rotated,files_uploaded,files_deleted,size_before,size_after,space_saved_mb,s3_path
 
-Collects everything you'd check during an outage.
-
-✅ Last 20 app errors  
-✅ Count 5xx responses  
-✅ Top failing endpoints  
-✅ Disk usage  
-✅ Memory usage  
-✅ CPU load  
-✅ System uptime  
-✅ Recommendations section  
-✅ Saves timestamped report  
-
-Run:
-
-```bash
-./triage.sh
-```
-
-Output:
-
-```
-triage-report-YYYYMMDD-HHMMSS.csv
-```
+Perfect for:
+- audits
+- metrics
+- interview proof
+- operational visibility
 
 ---
 
-## 🧹 logrotate-lite.sh — Prevent Disk Outages
+## 🧪 generate-logs1.sh (NEW)
 
-Triggers only when disk > 70%.
+Realistic log generator for safe local testing.
 
-Automatically:
+### Generates
+- 5 active service logs
+- 15 additional .log files
+- 15 rotated .gz archives
+- 9 archives dated 20+ days old (for retention testing)
+- INFO / DEBUG / ERROR logs
+- 5xx responses
+- failing endpoints
 
-✅ Removes DEBUG lines  
-✅ Rotates logs  
-✅ Compresses (gzip)  
-✅ Uploads to S3  
-✅ Deletes logs > 7 days  
-✅ Calculates space saved  
-✅ Prints summary  
+### Purpose
+Simulates production behavior so you can:
+- test rotation logic
+- simulate disk pressure
+- validate deletion rules
+- test retention safely
 
-Run:
-
-```bash
-./logrotate-lite.sh
-```
-
-Cron example (Friday 10PM):
-
-```
-0 22 * * 5 /home/ubuntu/scripts/logrotate-lite.sh
-```
+No real logs required.
 
 ---
 
-## 🧪 generate-logs.sh — Realistic Test Data
-
-Creates 2000+ line logs for realistic testing.
-
-```bash
-./generate-logs.sh
-```
-
-Generates:
-- app.log
-- access.log
-
----
-
-# 🎬 Quick Demo
-
-```bash
-# generate logs
-./sample-data/generate-logs.sh
-
-# copy to system paths
-sudo mkdir -p /var/log/app /var/log/nginx /etc/app
-sudo cp sample-data/*.log /var/log/app/
-sudo cp sample-data/access.log /var/log/nginx/
-
-# triage outage
-./scripts/triage.sh
-
-# cleanup disk + archive
-./scripts/logrotate-lite.sh
-```
-
----
-
-# 📈 Example Output
-
-```
-Total 5xx responses: 213
-Top failing endpoint: /api/login
-Disk usage before: 1.4G
-Disk usage after: 650M
-Space saved: 750 MB
-```
-
----
-
-# 🧠 Skills Demonstrated
-
-- Bash scripting
-- Linux CLI troubleshooting
-- grep / awk / sed pipelines
-- systemctl & services
-- cron scheduling
-- gzip compression
-- AWS CLI + S3
-- Log lifecycle management
-- Incident response mindset
-
----
-# 👤 Author
-
-Built as a practical DevOps/SRE portfolio project to demonstrate real-world operational skills.
-
-Happy debugging 🚀
+# 📁 Repository Structure
